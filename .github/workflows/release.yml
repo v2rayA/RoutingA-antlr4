@@ -21,7 +21,7 @@ jobs:
       - name: Build
         run: |
           mkdir build && cp *.g4 build/ && pushd build
-          echo "Dist of [RoutingA-antlr4](https://github.com/v2rayA/RoutingA-antlr4)\n" > README.md
+          echo -e "Dist of [RoutingA-antlr4](https://github.com/v2rayA/RoutingA-antlr4)\n" > README.md
           antlr4 -Dlanguage=Go -o go/routingA/ -package "routingA" routingA.g4
           antlr4 -Dlanguage=Cpp -o cpp/routingA/ -package "routingA" routingA.g4
           popd

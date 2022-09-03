@@ -3,7 +3,7 @@ grammar routingA;
 
 // Fragments
 fragment SAFE_ID_HEAD_CHAR: [a-zA-Z_] ;
-fragment SAFE_NONID_HEAD_CHAR: [/\\^*.+0-9-] ;
+fragment SAFE_NONID_HEAD_CHAR: [/\\!^*.+0-9-] ;
 fragment SAFE_INTERMEDIATE_CHAR: [@$] ;
 fragment SAFE_CHAR: ( SAFE_ID_HEAD_CHAR | SAFE_NONID_HEAD_CHAR | SAFE_INTERMEDIATE_CHAR ) ;
 fragment DOUBLE_QUOTE_STRING : '"' ( '\\"' | . )*? '"' ; // match "foo", "\"", "x\"\"y", ...
@@ -32,7 +32,7 @@ input
     ;
 
 programStructureBlcok
-    : optConditionStatement optFunctionPrototypeExpressionAnd expression
+    : optConditionStatement expression
     ;
 
 expression
@@ -47,11 +47,6 @@ optConditionStatement
     | // empty
     ;
 
-optFunctionPrototypeExpressionAnd
-    : functionPrototypeExpression '&&'
-    | // empty
-    ;
-
 declaration
     : ID ':' assignmentExpression
     | ID ':' literal
@@ -62,10 +57,10 @@ assignmentExpression
     ;
 
 functionPrototype
-    : ID '(' parameterList ')'
+    : ID '(' optParameterList ')'
     ;
 
-parameterList
+optParameterList
     : nonEmptyParameterList
     | // empty
     ;
@@ -82,8 +77,23 @@ parameter
     ;
 
 routingRule
-    : functionPrototypeExpression '->' bare_literal
-    |  '{' functionPrototypeExpressionList '}' '->' bare_literal
+    : routingRuleLeft '->' bare_literal
+    | optFunctionPrototypeExpressionAnd '{' routingRuleList '}'
+    ;
+
+routingRuleLeft
+    : optFunctionPrototypeExpressionAnd '{' routingRuleLeftList '}'
+    | optFunctionPrototypeExpressionAnd functionPrototypeExpression
+    ;
+
+routingRuleLeftList
+    : routingRuleLeft
+    | routingRuleLeft routingRuleLeftList
+    ;
+
+optFunctionPrototypeExpressionAnd
+    : functionPrototypeExpression '&&'
+    | // empty
     ;
 
 functionPrototypeExpression
@@ -92,13 +102,14 @@ functionPrototypeExpression
 //    | functionPrototypeExpression '||' functionPrototypeExpression
     ;
 
-functionPrototypeExpressionList
-    : functionPrototypeExpression
-    | functionPrototypeExpression functionPrototypeExpressionList
+routingRuleOrDeclarationList
+    : routingRule
+    | declaration
+    | routingRule routingRuleOrDeclarationList
+    | declaration routingRuleOrDeclarationList
     ;
 
-routingRuleOrDeclarationList
-    : routingRule routingRuleOrDeclarationList
-    | declaration routingRuleOrDeclarationList
-    | // empty
+routingRuleList
+    : routingRule
+    | routingRule routingRuleList
     ;
