@@ -44,7 +44,7 @@ jobs:
             const commit = await github.rest.repos.getCommit({
               owner: context.repo.owner,
               repo: 'RoutingA-dist',
-              ref: 'master'
+              ref: 'main'
             });
             try {
               await github.rest.git.createRef({
