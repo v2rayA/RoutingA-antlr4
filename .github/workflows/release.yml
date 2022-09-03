@@ -14,6 +14,10 @@ jobs:
         # uses: StoneMoe/setup-antlr4@09efbcfc95838745ee61c14ff0b8ff53144a5edb
         uses: StoneMoe/setup-antlr4@v4.10.1
 
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - name: Build
         run: |
           mkdir build && cp *.g4 build/ && pushd build
