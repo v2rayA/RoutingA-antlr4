@@ -3,7 +3,7 @@ grammar routingA;
 
 // Fragments
 fragment SAFE_ID_HEAD_CHAR: [a-zA-Z_] ;
-fragment SAFE_NONID_HEAD_CHAR: [/\\!^*.+0-9-] ;
+fragment SAFE_NONID_HEAD_CHAR: [/\\^*.+0-9-] ;
 fragment SAFE_INTERMEDIATE_CHAR: [@$] ;
 fragment SAFE_CHAR: ( SAFE_ID_HEAD_CHAR | SAFE_NONID_HEAD_CHAR | SAFE_INTERMEDIATE_CHAR ) ;
 fragment DOUBLE_QUOTE_STRING : '"' ( '\\"' | . )*? '"' ; // match "foo", "\"", "x\"\"y", ...
@@ -16,7 +16,7 @@ COMMENT_LINE_SHARP : '#' .*? ( [\r\n]+ | EOF ) -> skip ;
 
 ID : SAFE_ID_HEAD_CHAR SAFE_CHAR* ;
 NON_ID : SAFE_NONID_HEAD_CHAR SAFE_CHAR* ;
-QUOTE_STRING: DOUBLE_QUOTE_STRING | SINGLE_QUOTE_STRING;
+QUOTE_STRING : DOUBLE_QUOTE_STRING | SINGLE_QUOTE_STRING;
 
 // Rules
 start : input EOF;
@@ -57,7 +57,7 @@ assignmentExpression
     ;
 
 functionPrototype
-    : ID '(' optParameterList ')'
+    : '!'? ID '(' optParameterList ')'
     ;
 
 optParameterList
