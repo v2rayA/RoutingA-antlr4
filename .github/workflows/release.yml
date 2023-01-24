@@ -14,6 +14,11 @@ jobs:
         # uses: StoneMoe/setup-antlr4@09efbcfc95838745ee61c14ff0b8ff53144a5edb
         uses: StoneMoe/setup-antlr4@v4.10.1
 
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ^1.19
+
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -21,11 +26,12 @@ jobs:
       - name: Build
         run: |
           mkdir build && cp *.g4 build/ && pushd build
-          echo -e "Dist of [RoutingA-antlr4](https://github.com/v2rayA/RoutingA-antlr4)\n" > README.md
+          echo "Dist of [RoutingA-antlr4](https://github.com/v2rayA/RoutingA-antlr4)" > README.md
           antlr4 -Dlanguage=Go -o go/routingA/ -package "routingA" routingA.g4
+          pushd go/routingA && go mod init github.com/v2rayA/RoutingA-dist/go/routingA && go mod tidy && popd
           antlr4 -Dlanguage=Cpp -o cpp/routingA/ -package "routingA" routingA.g4
           popd
-          
+
       - name: Deploy Release Repository
         if: startsWith(github.ref, 'refs/tags/v')
         uses: crazy-max/ghaction-github-pages@v2.5.0
@@ -34,7 +40,7 @@ jobs:
           target_branch: main
           build_dir: build
         env:
-            GH_PAT: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GH_PAT: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - name: Tag Release Repository
         if: startsWith(github.ref, 'refs/tags/v')
         uses: actions/github-script@v6
