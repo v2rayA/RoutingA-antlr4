@@ -9,10 +9,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Antlr4
+      - name: Setup Antlr4 on Ubuntu
         # You may pin to the exact commit or the version.
-        # uses: StoneMoe/setup-antlr4@09efbcfc95838745ee61c14ff0b8ff53144a5edb
-        uses: StoneMoe/setup-antlr4@v4.10.1
+        # uses: siacodelabs/setup-antlr4@2a367a3a69c7295bffaea49f7545929aaa950cde
+        uses: siacodelabs/setup-antlr4@v2
+        with:
+          # Antlr version to install.
+          antlr4-version: 4.11.1
 
       - name: Set up Go
         uses: actions/setup-go@v3
