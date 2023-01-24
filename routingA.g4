@@ -4,7 +4,7 @@ grammar routingA;
 // Fragments
 fragment SAFE_ID_HEAD_CHAR: [a-zA-Z_] ;
 fragment SAFE_NONID_HEAD_CHAR: [/\\^*.+0-9-] ;
-fragment SAFE_INTERMEDIATE_CHAR: [@$] ;
+fragment SAFE_INTERMEDIATE_CHAR: [@$!] ;
 fragment SAFE_CHAR: ( SAFE_ID_HEAD_CHAR | SAFE_NONID_HEAD_CHAR | SAFE_INTERMEDIATE_CHAR ) ;
 fragment DOUBLE_QUOTE_STRING : '"' ( '\\"' | . )*? '"' ; // match "foo", "\"", "x\"\"y", ...
 fragment SINGLE_QUOTE_STRING : '\'' ( '\\\'' | . )*? '\'' ; // match 'foo', '\'', 'x\'\'y', ...
